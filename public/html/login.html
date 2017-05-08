@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+</head>
+<body>
+    <form method="post" id="form">
+        <input type="text" name="email" value="" placeholder="email">
+        <input type="password" name="password" value="" placeholder="password">
+        <input type="button" id="submit" value="Submit">
+    </form>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $("#submit").click(function(){
+            var form = $("#form").serializeArray();
+            form = {email:form[0].value, password:form[1].value}
+            console.log(form);
+            $.ajax({
+                url: "/login",
+                type: 'post',
+                data: form,
+                dataType: 'json',
+                success:function(user) {
+                    console.log("success, data is ", user);
+                    var data = JSON.stringify(user);
+                    sessionStorage.setItem("user", data);
+                    window.location.href = "/index.html";
+                },
+                error:function(data, errorString){
+                    console.log('error is ', errorString);
+                }
+            });
+        })
+    </script>
+</body>
+
+
+</html>

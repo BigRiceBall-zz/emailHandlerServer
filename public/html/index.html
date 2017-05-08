@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+</head>
+<body>
+    <table id = "content">
+    </table>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script type="text/javascript">
+    var user;
+    $(document).ready(function() {
+        user = JSON.parse(sessionStorage.getItem("user"));
+        $.ajax({
+            url: "/getAllData",
+            type: 'get',
+            success:function(people) {
+                console.log(people);
+                for (var person of people) {
+                    var data = "<tr> \
+                                    <th>person: "+person.id+"</th> \
+                                    <td><button id= '"+person.id+"' onclick='contact(this)'>contact</button></td>\
+                               </tr>"
+                    $("#content").append(data);
+                }
+            },
+            error:function(data, errorString){
+                console.log('error is ', errorString);
+            }
+        });
+    });
+    function contact(elem) {
+        var id = $(elem).attr("id");
+        $.ajax({
+            url: "/contact",
+            type: 'post',
+            data: {target:id, source:user.UserID, email:user.UserEmail},
+            success:function(people) {
+            },
+            error:function(data, errorString){
+                console.log('error is ', errorString);
+            }
+        });
+    }
+</script>
+</html>
